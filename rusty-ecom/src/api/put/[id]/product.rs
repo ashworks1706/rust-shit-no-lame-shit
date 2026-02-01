@@ -1,10 +1,12 @@
 use axum::{extract::{State, Path}, Json};
 use crate::models::{Product, UpdateProduct};
 use crate::error::AppError;
+use crate::middleware::AuthUser;
 use std::sync::Arc;
 use sqlx::SqlitePool;
 
 pub async fn put_product(
+    auth: AuthUser,
     Path(id): Path<String>,
     State(pool): State<Arc<SqlitePool>>,
     Json(payload): Json<UpdateProduct>

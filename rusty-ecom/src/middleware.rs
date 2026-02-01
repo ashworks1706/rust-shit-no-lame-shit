@@ -9,21 +9,22 @@ use crate::auth::{validate_jwt, Claims};
 use crate::error::AppError;
 
 
-// need ot be extracted from request headers for handlers that need aut h
-pub struct AuthUser{
+// need to be extracted from request headers for handlers that need auth
+#[derive(Debug, Clone)]
+pub struct AuthUser {
     pub user_id: String,
     pub email: String,
 }
 
-// implement extractor 
-//
+// implement extractor
+#[async_trait::async_trait]
 impl<S> FromRequestParts<S> for AuthUser
 where
     S: Send + Sync,
 {
     type Rejection = AppError;
 
-    async fn from_request_parts(parts: &mut Parts, _state: &S) -> Result<Self, Self::Rejection> {
+    async fn from_request_parts(parts: &mut Parts, _state: &S) -> Result<Self, Self::Rejection> where S: 'async_trait {
         // get authorization header
         let auth_header = parts
             .headers

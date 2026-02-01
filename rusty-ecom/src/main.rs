@@ -11,7 +11,8 @@ mod models;
 mod db;
 mod api;
 mod error;
-mod auth;  // Add this line
+mod auth; 
+mod middleware;
 
 use std::sync::Arc;
 

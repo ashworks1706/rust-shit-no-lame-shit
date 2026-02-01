@@ -1,10 +1,12 @@
 use axum::{extract::State, Json};
 use crate::error::AppError;
+use crate::middleware::AuthUser;
 use std::sync::Arc;
 use sqlx::SqlitePool;
 use serde_json::{json, Value};
 
 pub async fn delete_products(
+    auth: AuthUser,
     State(pool): State<Arc<SqlitePool>>,
     Json(ids): Json<Vec<String>>
 ) -> Result<Json<Value>, AppError> {
@@ -23,6 +25,7 @@ pub async fn delete_products(
     
     Ok(axum::Json(json!({
         "message": "Products deleted successfully",
-        "deleted_count": deleted_count
+        "deleted_count": deleted_count,
+        "deleted_by": auth.email
     })))
 }

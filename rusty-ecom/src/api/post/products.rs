@@ -1,12 +1,14 @@
 use axum::{extract::State, Json};
 use crate::models::{Product, CreateProduct};
 use crate::error::AppError;
+use crate::middleware::AuthUser;
 use std::sync::Arc;
 use sqlx::SqlitePool;
 use uuid::Uuid;
 
 // Post batch of products
 pub async fn post_products(
+    auth: AuthUser,
     State(pool): State<Arc<SqlitePool>>, 
     Json(products): Json<Vec<CreateProduct>>
 ) -> Result<Json<Vec<Product>>, AppError> {
