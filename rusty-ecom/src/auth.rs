@@ -1,7 +1,12 @@
 use serde::{Deserialize, Serialize};
 use jsonwebtoken::{EncodingKey, DecodingKey, Header, Validation, encode, decode, TokenData};
 
-const SECRET: &[u8] = b"your_super_secret_jwt_key_min_32_chars_change_in_production";
+
+const SECRET : &[u8] = match option_env!("JWT_SECRET") {
+    Some(val) => secret.as_bytes(),
+    None => b"some-secret",
+};
+
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct Claims {
